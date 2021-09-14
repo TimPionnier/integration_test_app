@@ -5,7 +5,8 @@ import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  final IntegrationTestWidgetsFlutterBinding binding =
+      IntegrationTestWidgetsFlutterBinding();
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
@@ -16,6 +17,10 @@ void main() {
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
 
+    await binding.convertFlutterSurfaceToImage();
+    await tester.pumpAndSettle();
+    await binding.takeScreenshot('screenshot-findsO');
+
     // Tap the + icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
@@ -23,5 +28,9 @@ void main() {
     // Verify that our counter incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
+
+    // await binding.convertFlutterSurfaceToImage();
+    await tester.pumpAndSettle();
+    await binding.takeScreenshot('screenshot-finds1');
   });
 }
